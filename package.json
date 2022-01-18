@@ -1,0 +1,31 @@
+{
+  "name": "shoppingify-backend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "set NODE_ENV=development&&nodemon server.js",
+    "start:prod": "set NODE_ENV=production&&nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.26.1",
+    "cookie": "^0.4.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.1.0",
+    "express-rate-limit": "^5.3.0",
+    "google-auth-library": "^7.1.2",
+    "helmet": "^4.6.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.14",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.6.3",
+    "validator": "^13.6.0",
+    "xss-cleanxss-clean": "^0.1.1"
+  }
+}
