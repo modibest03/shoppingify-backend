@@ -1,7 +1,6 @@
 import Item from '../models/itemsModel.js';
 import History from '../models/historyModel.js';
 import cloudinary from '../utils/cloudinary.js';
-import ErrorResponse from '../utils/errorResponse.js';
 
 export const addItem = async (req, res, next) => {
   try {
