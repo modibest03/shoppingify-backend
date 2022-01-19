@@ -16,8 +16,9 @@ mongoose
   .connect(process.env.DATABASE_PROD, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   })
-  .then((con) => console.log('DB connection successful!'));
+  .then(() => console.log('DB connection successful!'));
 
 const server = app.listen(PORT, () =>
   console.log(`Server running on port: ${PORT}`)

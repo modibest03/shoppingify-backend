@@ -8,6 +8,7 @@ import xss from 'xss-clean';
 import globalErrorHandler from './controllers/errorController.js';
 import userRouter from './routes/userRoute.js';
 import itemRouter from './routes/itemRoutes.js';
+import ErrorResponse from './utils/errorResponse.js';
 
 const app = express();
 
@@ -28,12 +29,16 @@ app.use(cookieParser());
 app.use(mongoSanitize());
 app.use(xss());
 
+console.log('coming');
+
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/items', itemRouter);
 
 app.all('*', (req, res, next) => {
   next(new ErrorResponse(`Can't find ${req.originalUrl} on this server`, 404));
 });
+
+console.log('reach 2');
 
 app.use(globalErrorHandler);
 

@@ -28,9 +28,10 @@ const sendErrorDev = (err, res) => {
 
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
-    res
-      .status(err.statusCode)
-      .json({ status: err.status, message: err.message });
+    res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message,
+    });
   } else {
     console.log('ERROR', err);
     res.status(500).json({
@@ -43,15 +44,18 @@ const sendErrorProd = (err, res) => {
 const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
+
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
-    let error = { ...err };
+    let error = Object.assign({ message: err.message }, err);
 
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-    if (error.name === 'validationError')
+    if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
+    if (error.name === 'JsonWebTokenError') error = handleJWTError();
+    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
     sendErrorProd(error, res);
   }
