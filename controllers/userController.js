@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 import History from '../models/historyModel.js';
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
@@ -14,10 +14,10 @@ const createSendToken = (user, statusCode, res) => {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 7, // 1 week
     path: '/',
-    //   secure: process.env.NODE_ENV !== "development",
+    // secure: req.secure || req.headers('x-forwarded-proto') === 'https',
   };
 
-  if (process.env.NODE_ENV === 'production') {
+  if (req.secure || req.headers('x-forwarded-proto') === 'https') {
     cookieOptions.secure = true;
   }
 
@@ -35,7 +35,7 @@ const createSendToken = (user, statusCode, res) => {
 export const signUp = async (req, res, next) => {
   try {
     const user = await User.create(req.body);
-    createSendToken(user, 201, res);
+    createSendToken(user, 201, req, res);
   } catch (err) {
     next(err);
   }
@@ -57,7 +57,7 @@ export const signIn = async (req, res, next) => {
       return next(new ErrorResponse('Incorrect Password or email', 401));
     }
 
-    createSendToken(user, 200, res);
+    createSendToken(user, 200, req, res);
   } catch (err) {
     next(err);
   }

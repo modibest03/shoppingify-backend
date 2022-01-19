@@ -12,7 +12,18 @@ import ErrorResponse from './utils/errorResponse.js';
 
 const app = express();
 
+app.enable('trust proxy');
+
 app.use(helmet());
+
+app.use(cors());
+
+// * Allowing cors for specific urls
+// *app.use(cors({
+// *   origin: 'https://www.google.com'
+// *}))
+
+app.options('*', cors());
 
 const limiter = rateLimit({
   max: 100,
@@ -28,8 +39,6 @@ app.use(cookieParser());
 
 app.use(mongoSanitize());
 app.use(xss());
-
-console.log('coming');
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/items', itemRouter);
