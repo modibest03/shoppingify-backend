@@ -17,7 +17,7 @@ const createSendToken = (user, statusCode, req, res) => {
     // secure: req.secure || req.headers('x-forwarded-proto') === 'https',
   };
 
-  if (req.secure || req.headers('x-forwarded-proto') === 'https') {
+  if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
     cookieOptions.secure = true;
   }
 
@@ -213,13 +213,20 @@ export const deleteItemFromCart = async (req, res, next) => {
 export const addToHistory = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const { name, complete } = req.body;
+    const { name, complete, createdAt } = req.body;
 
     const oldUser = await User.findById(_id);
+
+    if (oldUser.cart.length === 0) {
+      return next(
+        new ErrorResponse('You cant add and empty data to history', 400)
+      );
+    }
 
     const history = await History.create({
       name,
       complete,
+      createdAt,
       userId: _id,
       shoppingHistory: oldUser.cart,
     });

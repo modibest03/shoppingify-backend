@@ -26,7 +26,7 @@ app.use(cors());
 app.options('*', cors());
 
 const limiter = rateLimit({
-  max: 100,
+  max: 1000,
   windows: 60 * 60 * 1000,
   message: 'too many requests from this Ip, please try again in an hour!',
 });
@@ -46,8 +46,6 @@ app.use('/api/v1/items', itemRouter);
 app.all('*', (req, res, next) => {
   next(new ErrorResponse(`Can't find ${req.originalUrl} on this server`, 404));
 });
-
-console.log('reach 2');
 
 app.use(globalErrorHandler);
 

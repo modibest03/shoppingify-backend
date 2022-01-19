@@ -6,7 +6,7 @@ export const addItem = async (req, res, next) => {
   try {
     let result;
     const { _id } = req.user;
-    const { name, category, note } = req.body;
+    const { name, category, note, createdAt } = req.body;
 
     if (req.file) {
       result = await cloudinary.uploader.upload(req.file.path, {
@@ -18,6 +18,7 @@ export const addItem = async (req, res, next) => {
       name,
       category,
       note,
+      createdAt,
       userId: _id,
       image: result.secure_url,
     });
